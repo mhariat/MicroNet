@@ -1,0 +1,38 @@
+# Adding Sparsity [STEP 3]
+
+Before beginning STEP 3, please be sure to have a directory named "pruned_weights" in "MicroNet/Pruning" in which you
+would have put the checkpoint files of the previous pruning step (STEP 2).
+
+For PyramidNet only, please respect the following syntax:
+
+"MicroNet/Pruning/pruned_weights/pyramidnet/pyramid_noskip_back/checkpoint_run_[nb]_[acc]_[compression].pth"
+
+The name of the pth files obtained at STEP 2 during pruning should already be in the format displayed just above. The
+checkpoint files should only be put in the directory "MicroNet/Pruning/pruned_weights/pyramidnet/pyramid_noskip_back".
+
+For PyramidNet + SkipNet, please respect the following syntax:
+
+"MicroNet/Pruning/pruned_weights/pyramidskipnet/alpha_4/pyramid_skip_back/checkpoint_run_[nb]_[acc]_[compression].pth"
+
+The name of the pth files obtained at STEP 2 during pruning should already be in the format displayed just above. The
+checkpoint files should only be put in the directory "MicroNet/Pruning/pruned_weights/pyramidskipnet/alpha_4/pyramid_skip_back".
+
+
+Still in the same docker than STEP 2 launch the command:
+
+CUDA_VISIBLE_DEVICES=0 python /usr/share/bind_mount/scripts/MicroNet/Sparsity/main.py --config_path /usr/share/bind_mount/scripts/MicroNet/Sparsity/config.json
+
+- Be sure to complete the json file "config.json" appropriately before applying sparsity.
+
+Here are the arguments that must be respected:
+
+For PyramidNet only --> "exp_name": pyramidnet_noskip_back, "network": "pyramidnet"
+For PyramidNet only --> "exp_name": pyramidnet_skip_back, "network": "pyramidskipnet"
+
+You may want to change the batch_size.
+
+In config.json, for the "checkpoint_file" argument choose the checkpoint file with the best compression.
+(checkpoint file format: checkpoint_run_[nb]_[acc]_[compression].pth).
+
+- Be sure to complete the json file "config.json" appropriately before applying the sparsity.
+
