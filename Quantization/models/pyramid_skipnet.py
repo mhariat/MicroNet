@@ -247,13 +247,9 @@ class PyramidSkipNet(Models):
         x = self.layer1(x)
         self.control.hidden = self.control.init_hidden(batch_size)
 
-        masks = []
-        gprobs = []
         x = getattr(self, 'group1_layer0')(x)
         gate_feature = getattr(self, 'group1_gate0')(x)
         mask, gprob = self.control(gate_feature)
-        gprobs.append(gprob)
-        masks.append(mask.squeeze())
         prev = x
 
         for g in range(2):
@@ -271,15 +267,13 @@ class PyramidSkipNet(Models):
                 if not (g == 1 and (i == self.num_layers - 1)):
                     gate_feature = getattr(self, 'group{}_gate{}'.format(g+1, i))(x)
                     mask, gprob = self.control(gate_feature)
-                    gprobs.append(gprob)
-                    masks.append(mask.squeeze())
 
         x = self.bn_final(x)
         x = self.relu_final(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         x = self.fc(x)
-        return x, masks, gprobs
+        return x
 
     def add_basis(self):
         self.conv1 = BasisLayer(self.conv1)

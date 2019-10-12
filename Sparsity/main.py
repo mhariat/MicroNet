@@ -20,26 +20,20 @@ def init_network(config):
         net = PyramidSkipNet(dataset='cifar100', depth=272, alpha=200, num_classes=100, bottleneck=True)
     else:
         raise NotImplementedError
-    path_to_add = '/usr/share/bind_mount/scripts/MicroNet/Pruning/pruned_weights/{}/{}'.format(config.network,
-                                                                                               config.exp_name)
     checkpoint_file = config.checkpoint_file
-    assert os.path.exists(path_to_add), 'No pruning for the corresponding network and/or experience'
-    if 'skip' in net.name.lower():
-        if config.alpha == 1e-4:
-            alpha = 4
-        elif config.alpha == 1e-5:
-            alpha = 5
-        else:
-            raise NotImplementedError
-        checkpoint_path = '{}/alpha_{}/{}'.format(path_to_add, alpha, checkpoint_file)
-        exp_name = config.exp_name
+    if config.use_rl:
+        path_to_add = '/usr/share/bind_mount/scripts/MicroNet/RL/rl_weights/{}/{}'.format(config.network,
+                                                                                          config.exp_name)
+        compression = checkpoint_file.split('_')[-2].split('.pth')[0]
     else:
-        checkpoint_path = '{}/{}'.format(path_to_add, checkpoint_file)
-        exp_name = config.exp_name
+        path_to_add = '/usr/share/bind_mount/scripts/MicroNet/Pruning/pruned_weights/{}/{}'.format(config.network,
+                                                                                                   config.exp_name)
+        compression = checkpoint_file.split('_')[-1].split('.pth')[0]
+    checkpoint_path = '{}/{}'.format(path_to_add, checkpoint_file)
+    exp_name = config.exp_name
     net = load_checkpoint_pruning(checkpoint_path, net, use_bias=True)
     if torch.cuda.is_available():
         net.cuda()
-    compression = checkpoint_file.split('_')[-1].split('.pth')[0]
     return net, exp_name, float(compression)
 
 
@@ -94,7 +88,7 @@ def main(config):
               ' Network to prune: {}_{}. Pruned Network accuracy: {:.2f}% (Exp_name: {}.' \
               ' Network Compression: {:.2f}%)'.\
         format(pruner_name, scheduler_id[config.scheduler_id], device_used, dataset, num_classes, config.network,
-               config.depth, 100*original_accuracy, exp_name, 100*compression)
+               272, 100*original_accuracy, exp_name, 100*compression)
     print(colored('\n{}\n'.format(message), 'magenta'))
     logger.info(message)
     it = 0
@@ -119,7 +113,7 @@ def main(config):
         optimizer = optim.SGD(net.parameters(), lr=lr, momentum=momentum, weight_decay=weight_decay)
         scheduler.settle(lr_schedule=lr_schedule, optimizer=optimizer)
         pruner.fine_tune(epochs=epochs, optimizer=optimizer, scheduler=scheduler, train_dataloader=train_dataloader,
-                         val_dataloader=val_dataloader, alpha=config.alpha)
+                         val_dataloader=val_dataloader, alpha=1e-4)
         result.add_results()
         current_compression = result.stats[it + 1]['Ratio/prune_ratio']
         current_accuracy = result.stats[it + 1]['Performance/val_acc']

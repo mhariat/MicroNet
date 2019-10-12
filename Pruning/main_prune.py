@@ -29,12 +29,7 @@ def init_network(config):
         raise NotImplementedError
     path_to_add = '/usr/share/bind_mount/scripts/MicroNet/Training/trained_weights/{}'.format(config.network)
     if 'skip' in net.name.lower():
-        if config.alpha == 1e-4:
-            alpha = 4
-        elif config.alpha == 1e-5:
-            alpha = 5
-        else:
-            raise NotImplementedError
+        alpha = 4
         checkpoint_path = '{}/alpha_{}/pyramid_skip_last_epoch_alpha_{}.pth'.format(path_to_add, alpha, alpha)
         exp_name = 'PyramidSkipNet'
     else:
@@ -105,7 +100,7 @@ def main(config):
     message = 'Pruning method used: {}. Scheduler used: {}. Device used: {}. Dataset: {}. Number of classes: {}.' \
               ' Network to prune: {}_{}. Original accuracy: {:.2f}% (Exp_name: {}. Trained for {} epochs)'.\
         format(pruner_id[config.pruner_id], scheduler_id[config.scheduler_id], device_used, dataset, num_classes,
-               config.network, config.depth, 100*original_accuracy, exp_name, original_epochs)
+               config.network, 272, 100*original_accuracy, exp_name, original_epochs)
     print(colored('\n{}\n'.format(message), 'magenta'))
     logger.info(message)
     it = 0

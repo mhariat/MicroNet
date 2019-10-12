@@ -12,13 +12,7 @@ def init_network(config):
                                                                                                config.exp_name)
     checkpoint_file = config.checkpoint_file
     assert os.path.exists(path_to_add), 'No pruning for the corresponding network and/or experience'
-    if config.alpha == 1e-4:
-        alpha = 4
-    elif config.alpha == 1e-5:
-        alpha = 5
-    else:
-        raise NotImplementedError
-    checkpoint_path = '{}/alpha_{}/{}'.format(path_to_add, alpha, checkpoint_file)
+    checkpoint_path = '{}/{}'.format(path_to_add, checkpoint_file)
     exp_name = config.exp_name
     net = load_checkpoint_pruning(checkpoint_path, net, use_bias=True)
     if torch.cuda.is_available():
@@ -45,13 +39,13 @@ def main(config):
 
     create_dir(config.result_dir)
     dataset = 'cifar_100'
-    path_to_add = '{}/{}/{}'.format(dataset, config.network, config.depth)
+    path_to_add = '{}/{}/{}'.format(dataset, config.network, 272)
     writer_dir = '{}/writer/RL/{}'.format(config.result_dir, path_to_add)
     exp_name = config.exp_name
     if exp_name is None:
         exp_name = 'unknown'
     run = get_run(writer_dir, exp_name)
-    exp_name = 'run_{}_{}'.format(run, exp_name)
+    exp_name = 'run_{}'.format(run)
     writer_dir = '{}/{}'.format(writer_dir, exp_name)
     checkpoint_dir = '{}/checkpoint/RL/{}'.format(config.result_dir, path_to_add)
     log_dir = '{}/logs/RL/{}'.format(config.result_dir, path_to_add)
@@ -71,7 +65,7 @@ def main(config):
     message = 'RL part. Device used: {}. Dataset: {}. Number of classes: {}. Network to prune: {}_{}.' \
               ' Pruned Network accuracy: {:.2f}%. Pruned Network Computation Percentage: {:.2f}' \
               ' (Exp_name: {}. Network Compression: {:.2f}%)'.\
-        format(device_used, dataset, num_classes, config.network, config.depth, 100*original_accuracy, original_cp,
+        format(device_used, dataset, num_classes, config.network, 272, 100*original_accuracy, original_cp,
                exp_name, 100*compression)
     print(colored(message, 'magenta'))
     logger.info(message)
@@ -107,7 +101,11 @@ def main(config):
         for name in stat.keys():
             writer.add_scalar(name, stat[name], epoch)
 
-    filename = 'checkpoint_{}_{:.4f}_{:.4f}.pth'.format(exp_name, val_acc, cp.item())
+        if epoch % 11 == 0:
+            filename = 'checkpoint_{}_{:.4f}_{:.4f}_{:.4f}.pth'.format(exp_name, val_acc, compression, cp.item())
+            torch.save(net.state_dict(), '{}/{}'.format(checkpoint_dir, filename))
+
+    filename = 'checkpoint_{}_{:.4f}_{:.4f}_{:.4f}.pth'.format(exp_name, val_acc, compression, cp.item())
     torch.save(net.state_dict(), '{}/{}'.format(checkpoint_dir, filename))
 
 

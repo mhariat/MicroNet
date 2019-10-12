@@ -185,7 +185,6 @@ class EmptyLayer(torch.nn.Module):
 
 
 def insert_quant_modules(model, a_quant_module):
-    condition = True
     quant_modules = []
     for k, v in model._modules.items():
         if len(v._modules.items()) > 0:
@@ -194,13 +193,12 @@ def insert_quant_modules(model, a_quant_module):
                 quant_modules.append(module)
         else:
             if not isinstance(v, EmptyLayer):
-                if condition:
-                    new_modules = OrderedDict()
-                    new_modules[k] = v
-                    new_quant_module = copy.deepcopy(a_quant_module)
-                    new_modules['quant'] = new_quant_module
-                    quant_modules.append(new_quant_module)
-                    model._modules[k] = torch.nn.Sequential(new_modules)
+                new_modules = OrderedDict()
+                new_modules[k] = v
+                new_quant_module = copy.deepcopy(a_quant_module)
+                new_modules['quant'] = new_quant_module
+                quant_modules.append(new_quant_module)
+                model._modules[k] = torch.nn.Sequential(new_modules)
 
     return quant_modules, model
 
@@ -268,6 +266,6 @@ class QuantizedNet(torch.nn.Module):
 
 
 def load_quantization_architecture(model):
-    for module in model.modules():
+    for name, module in model.named_modules():
         if isinstance(module, SigmaMax):
             module.register_buffer('forward_bp', torch.tensor(0))

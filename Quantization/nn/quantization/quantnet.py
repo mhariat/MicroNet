@@ -68,6 +68,7 @@ class QuantizedNet(torch.nn.Module):
         # and store the list of added activation quant modules
         self.a_quant_modules = []
         self.a_quant_modules, self.quant_net = insert_quant_modules(copy.deepcopy(net), a_quant_module)
+        # self.a_quant_modules, self.quant_net = insert_quant_modules(copy.deepcopy(net), a_quant_module)
         self.a_quant_modules.append(self.quant_input)
 
         self.w_quant_modules = {}

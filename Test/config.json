@@ -1,15 +1,17 @@
 {
   "result_dir": "/app/results",
-  "checkpoint_file_sparsity": "checkpoint_run_0_0.8075_0.9281_0.4531.pth",
-  "checkpoint_file_quantization": "checkpoint_quantized_weights_0.8011_0.9281_0.4531.pth",
-  "batch_size": 64,
   "num_workers": 16,
-  "network": "pyramidnet",
   "depth": 272,
   "mul_bits": 12,
   "add_bits": 32,
   "param_bits": 9,
   "exponent_bits": 8,
+
+  "comments_": "------ Do not touch parameters above! Explications about them can be found in the README file -------",
+
+  "network": "pyramidnet",
+  "batch_size": 100,
   "freebie": false,
+  "submission": 2,
   "exp_name": "pyramidnet_noskip_back"
 }

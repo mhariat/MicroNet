@@ -11,6 +11,7 @@ from models.pyramid_net import *
 from nn import EmptyLayer
 import copy
 
+
 class TBLogger(object):
     r"""Logger to log data in tensorboard.
 
@@ -391,5 +392,3 @@ def remove_bn(net):
                 ct += 1
 
     replace_bn(net)
-
-# TEST

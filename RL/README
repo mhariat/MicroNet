@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python /usr/share/bind_mount/scripts/MicroNet/RL/main.py --config_path /usr/share/bind_mount/scripts/MicroNet/RL/config.json

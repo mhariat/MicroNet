@@ -4,6 +4,7 @@ import gc
 from models.pyramid_net import *
 from models.pyramid_skipnet import *
 
+
 def compute_conv2d_flops(module, input, output):
     batch_size, input_channels, input_height, input_width = input[0].size()
     output_channels, output_height, output_width = output[0].size()
@@ -206,6 +207,7 @@ def get_total_flops(model, input_res, test_dataloader):
             out = model(data)
     torch.cuda.empty_cache()
     list_total = list_conv + list_linear + list_bn + list_relu + list_pooling + list_lstm
+
     residual_addition_flops = 0
     for module in model.modules():
         if isinstance(module, Bottleneck):

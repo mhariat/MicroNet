@@ -244,14 +244,20 @@ class PyramidSkipNet(Models):
         x = self.layer1(x)
         self.control.hidden = self.control.init_hidden(batch_size)
 
-        masks = []
-        gprobs = []
+        nb_switch = 0
+        total = 0
+
         x = getattr(self, 'group1_layer0')(x)
         gate_feature = getattr(self, 'group1_gate0')(x)
         mask, gprob = self.control(gate_feature)
-        gprobs.append(gprob)
-        masks.append(mask.squeeze())
+
+        print(mask.sum(), "group1_gate0")
+
+        if mask.sum().item() == 0:
+            mask[0] = 1
         prev = x
+        prev = prev[mask.squeeze() == 0]
+        x = x[mask.squeeze() == 1]
 
         for g in range(2):
             for i in range(0 + int(g == 0), self.num_layers):
@@ -261,22 +267,34 @@ class PyramidSkipNet(Models):
                 x_channels = x.size(1)
                 prev_channels = prev.size(1)
                 if x_channels != prev_channels:
-                    padding = torch.cuda.FloatTensor(batch_size, x_channels - prev_channels,
+                    padding = torch.cuda.FloatTensor(prev.size(0), x_channels - prev_channels,
                                                      x.size(2), x.size(3)).fill_(0)
                     prev = torch.cat((prev, padding), 1)
-                prev = x = mask.expand_as(x) * x + (1 - mask).expand_as(prev) * prev
+                res = torch.cuda.FloatTensor(batch_size, x.size(1), x.size(2), x.size(3))
+                res[mask.squeeze() == 0] = prev
+                res[mask.squeeze() == 1] = x
+                prev = x = res
+                # prev = x = mask.expand_as(x) * x + (1 - mask).expand_as(prev) * prev
                 if not (g == 1 and (i == self.num_layers - 1)):
                     gate_feature = getattr(self, 'group{}_gate{}'.format(g+1, i))(x)
                     mask, gprob = self.control(gate_feature)
-                    gprobs.append(gprob)
-                    masks.append(mask.squeeze())
+                    print(mask.sum(),  'group{}_gate{}'.format(g+1, i))
+                    nb_switch += mask.sum()
+                    total += mask.numel()
+                    if mask.sum().item() == 0:
+                        mask[0] = 1
+                    prev = prev[mask.squeeze() == 0]
+                    x = x[mask.squeeze() == 1]
+
+        print(nb_switch/total)
+        print('----------------------------------------------------')
 
         x = self.bn_final(x)
         x = self.relu_final(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         x = self.fc(x)
-        return x, masks, gprobs
+        return x
 
     def add_basis(self):
         self.conv1 = BasisLayer(self.conv1)

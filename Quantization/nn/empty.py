@@ -1,5 +1,6 @@
 import torch
 
+
 class EmptyLayer(torch.nn.Module):
     r"""Placeholder for 'route' and 'shortcut' layers"""
 

@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="651bc349-0fa5-43fa-901a-87d8fefeffcf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Pruning/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Quantization/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Sparsity/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Test/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Training/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Pruning/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Pruning/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Quantization/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Quantization/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sparsity/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Sparsity/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Training/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Training/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="651bc349-0fa5-43fa-901a-87d8fefeffcf" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,9 +14,6 @@
         <option value="Python Script" />
       </list>
     </option>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1Rhp115sXFAYzfOrN9L6R8aA7Xu" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -61,17 +45,6 @@
       <updated>1570128962935</updated>
     </task>
     <servers />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

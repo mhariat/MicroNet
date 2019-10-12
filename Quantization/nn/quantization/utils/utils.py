@@ -1,5 +1,6 @@
 import copy
 import torch
+import torch.nn
 from collections import OrderedDict
 from torchnet.engine import Engine
 from tqdm import tqdm
@@ -27,7 +28,6 @@ def insert_quant_modules(model, a_quant_module):
     r'''Inserts quantization modules at the ouput of each module/layer
     in a given graph.
     '''
-    condition = True
     quant_modules = []
     for k, v in model._modules.items():
         # If module has children, recursively attach quant modules to the sub-modules of the module.
@@ -37,16 +37,15 @@ def insert_quant_modules(model, a_quant_module):
                 quant_modules.append(module)
         else:
             if not isinstance(v, EmptyLayer):
-                if condition:
-                    new_modules = OrderedDict()
-                    # keep the original module
-                    new_modules[k] = v
-                    # add the quantization module
-                    new_quant_module = copy.deepcopy(a_quant_module)
-                    new_modules['quant'] = new_quant_module
-                    quant_modules.append(new_quant_module)
-                    # replace the module with a sequential module containing the original model and quantization layer(s)
-                    model._modules[k] = torch.nn.Sequential(new_modules)
+                new_modules = OrderedDict()
+                # keep the original module
+                new_modules[k] = v
+                # add the quantization module
+                new_quant_module = copy.deepcopy(a_quant_module)
+                new_modules['quant'] = new_quant_module
+                quant_modules.append(new_quant_module)
+                # replace the module with a sequential module containing the original model and quantization layer(s)
+                model._modules[k] = torch.nn.Sequential(new_modules)
 
     return quant_modules, model
 

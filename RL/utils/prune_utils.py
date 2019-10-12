@@ -568,7 +568,18 @@ def load_checkpoint_pruning(checkpoint_path, net, use_bias):
         m.cpu()
         del m
 
-    interesting_modules = [module for module in expand_model(net) if isinstance(module, (nn.Conv2d, nn.Linear))]
+    interesting_modules = []
+    for module in net.modules():
+        if isinstance(module, EigenBasisLayer):
+            main_module = module.sequential[1]
+            if isinstance(main_module, nn.Conv2d):
+                rotation_A = module.sequential[0].conv
+                rotation_G = module.sequential[2].conv
+            else:
+                rotation_A = module.sequential[0].linear
+                rotation_G = module.sequential[2].linear
+            interesting_modules += [rotation_A, main_module, rotation_G]
+
     ct = 0
     for module in interesting_modules:
         module.weight.data = torch.rand(shapes[ct])

@@ -58,10 +58,10 @@ class Pruner(metaclass=ABCMeta):
         res = []
         for module in self.all_modules:
             if isinstance(module, self.know_modules):
-                if not hasattr(module, 'not_interesting'):
-                    module.idx = ct
-                    res.append(module)
-                    ct += 1
+                # if not hasattr(module, 'not_interesting'):
+                module.idx = ct
+                res.append(module)
+                ct += 1
         return res
 
     def init_step(self):
@@ -102,6 +102,11 @@ class Pruner(metaclass=ABCMeta):
         self.extra_stat = {}
         if self.use_hook:
             self._launch_hook()
+        # for module in self.all_modules:
+        #     if isinstance(module, self.know_modules):
+        #         if hasattr(module, 'not_interesting'):
+        #             module.weight.requires_grad_(False)
+        #             module.bias.requires_grad_(False)
 
     def _get_threshold(self, prune_ratio):
         self.all_saliencies = self._get_all_saliencies()

@@ -13,44 +13,38 @@ def init_network(config):
         net = PyramidSkipNet(dataset='cifar100', depth=272, alpha=200, num_classes=100, bottleneck=True)
     else:
         raise NotImplementedError
-    path_to_add = '/usr/share/bind_mount/scripts/MicroNet/Sparsity/sparse_weights/{}/{}'.format(config.network,
-                                                                                                config.exp_name)
-    checkpoint_file = config.checkpoint_file_sparsity
+
+    path_to_add = '/usr/share/bind_mount/scripts/MicroNet/FinalWeights'
+    checkpoint_file = 'checkpoint_sparsity.pth'
     assert os.path.exists(path_to_add), 'No pruning for the corresponding network and/or experience'
-    if 'skip' in net.name.lower():
-        if config.alpha == 1e-4:
-            alpha = 4
-        elif config.alpha == 1e-5:
-            alpha = 5
-        else:
-            raise NotImplementedError
-        checkpoint_path = '{}/alpha_{}/{}'.format(path_to_add, alpha, checkpoint_file)
-        exp_name = config.exp_name
-    else:
-        checkpoint_path = '{}/{}'.format(path_to_add, checkpoint_file)
-        exp_name = config.exp_name
+    checkpoint_path = '{}/{}'.format(path_to_add, checkpoint_file)
+    exp_name = config.exp_name
 
     net = load_checkpoint_pruning(checkpoint_path, net, use_bias=True)
+    if config.submission in [2, 3]:
+        remove_bn(net)
     if config.freebie:
-        compression = checkpoint_file.split('_')[-2]
-        sparsity = checkpoint_file.split('_')[-1].split('.pth')[0]
-        return net, exp_name, float(compression), float(sparsity)
+        if torch.cuda.is_available():
+            net.cuda()
+        return net
     else:
-        a_quant_module = SigmaMax(forward_bits=12, forward_avg_const=0.01, forward_num_std=20)
-        w_quant_module = SigmaMax(forward_bits=9, forward_avg_const=1.0, forward_num_std=10)
+        a_quant_module = SigmaMax(forward_bits=config.mul_bits, forward_avg_const=0.01, forward_num_std=20)
+        w_quant_module = SigmaMax(forward_bits=config.param_bits, forward_avg_const=1.0, forward_num_std=10)
         quant_net = QuantizedNet(net, a_quant_module, w_quant_module)
         load_quantization_architecture(quant_net)
-        path_to_add = '/usr/share/bind_mount/scripts/MicroNet/Quantization/quantized_weights/{}/{}'.\
-            format(config.network, config.exp_name)
-        checkpoint_file = config.checkpoint_file_quantization
+        path_to_add = '/usr/share/bind_mount/scripts/MicroNet/FinalWeights'
+        if config.submission == 1:
+            checkpoint_file = 'checkpoint_quantization_first_submission.pth'
+        elif config.submission == 2:
+            checkpoint_file = 'checkpoint_quantization_second_submission.pth'
+        else:
+            checkpoint_file = 'checkpoint_quantization_third_submission.pth'
         checkpoint_path = '{}/{}'.format(path_to_add, checkpoint_file)
         checkpoint = torch.load(checkpoint_path, map_location='cpu')
         quant_net.load_state_dict(checkpoint)
         if torch.cuda.is_available():
             quant_net.cuda()
-        compression = checkpoint_file.split('_')[-2]
-        sparsity = checkpoint_file.split('_')[-1].split('.pth')[0]
-        return quant_net, exp_name, float(compression), float(sparsity)
+        return quant_net
 
 
 def main(config):
@@ -58,7 +52,7 @@ def main(config):
     print(config)
     train_dataloader, val_dataloader = get_dataloader(batch_size=config.batch_size, num_workers=config.num_workers)
 
-    net, exp_name, compression, sparsity = init_network(config)
+    net = init_network(config)
     loss_function = nn.CrossEntropyLoss()
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     accuracy = test(net, val_dataloader, loss_function, device).item()

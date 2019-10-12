@@ -1,13 +1,15 @@
 {
   "result_dir": "/app/results",
-  "checkpoint_file": "checkpoint_run_0_0.8075_0.9281_0.4531.pth",
-  "batch_size": 64,
   "num_workers": 16,
-  "network": "pyramidnet",
-  "depth": 272,
   "activation_bits": 12,
-  "activation_num_std": 20,
+  "activation_num_std": 18,
   "weight_bits": 9,
   "weight_num_std": 10,
+
+  "comments_": "------ Do not touch parameters above! Explications about them can be found in the README file -------",
+
+  "network": "pyramidnet",
+  "batch_size": 100,
+  "checkpoint_file": "checkpoint_run_0_0.8075_0.9281_0.4531.pth",
   "exp_name": "pyramidnet_noskip_back"
 }

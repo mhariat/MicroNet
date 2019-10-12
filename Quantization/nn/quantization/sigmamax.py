@@ -100,13 +100,23 @@ class SigmaMax(QuantModule):
             return
 
         mean = input.detach().mean()
-        if len(input.shape) == 4:
-            if input.shape[0]*input.shape[1]*input.shape[2]*input.shape[3] == 1:
-                std = 1e-15*torch.abs(mean)
-            else:
-                std = input.detach().std()
+        res = 1
+        n = len(input.shape)
+        for k in range(n):
+            res *= input.shape[k]
+
+        if res == 1:
+            std = 1e-15 * torch.abs(mean)
         else:
             std = input.detach().std()
+
+        # if len(input.shape) == 4:
+        #     if input.shape[0]*input.shape[1]*input.shape[2]*input.shape[3] == 1:
+        #         std = 1e-15*torch.abs(mean)
+        #     else:
+        #         std = input.detach().std()
+        # else:
+        #     std = input.detach().std()
 
         if self.forward_mean is None or self.forward_std is None:
             self.forward_mean = mean

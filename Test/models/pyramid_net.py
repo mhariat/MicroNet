@@ -76,6 +76,7 @@ class Bottleneck(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None, p_shakedrop=1.0):
         super(Bottleneck, self).__init__()
         self.bn1 = nn.BatchNorm2d(inplanes)
+        self.bn1.no_merging = True
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
         self.bn2 = nn.BatchNorm2d(planes)
         self.conv2 = nn.Conv2d(planes, (planes * 1), kernel_size=3, stride=stride,
@@ -173,6 +174,7 @@ class PyramidNet(Models):
 
         self.final_featuremap_dim = self.input_featuremap_dim
         self.bn_final = nn.BatchNorm2d(self.final_featuremap_dim)
+        self.bn_final.no_merging = True
         self.relu_final = nn.ReLU(inplace=True)
         self.avgpool = nn.AvgPool2d(8)
         self.fc = nn.Linear(self.final_featuremap_dim, num_classes)

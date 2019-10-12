@@ -5,7 +5,7 @@ from tqdm import tqdm
 from torchnet.engine import Engine
 from easydict import EasyDict
 import json
-
+from utils.quantization_utils import *
 
 def get_config_from_json(json_file):
     with open(json_file, 'r') as config_file:
@@ -249,7 +249,18 @@ def load_checkpoint_pruning(checkpoint_path, net, use_bias):
         m.cpu()
         del m
 
-    interesting_modules = [module for module in expand_model(net) if isinstance(module, (nn.Conv2d, nn.Linear))]
+    interesting_modules = []
+    for module in net.modules():
+        if isinstance(module, EigenBasisLayer):
+            main_module = module.sequential[1]
+            if isinstance(main_module, nn.Conv2d):
+                rotation_A = module.sequential[0].conv
+                rotation_G = module.sequential[2].conv
+            else:
+                rotation_A = module.sequential[0].linear
+                rotation_G = module.sequential[2].linear
+            interesting_modules += [rotation_A, main_module, rotation_G]
+
     ct = 0
     for module in interesting_modules:
         module.weight.data = torch.rand(shapes[ct])
@@ -262,3 +273,70 @@ def load_checkpoint_pruning(checkpoint_path, net, use_bias):
         ct += 1
     net.load_state_dict(checkpoint)
     return net
+
+
+def fuse_conv_bnorm(conv, bn):
+    with torch.no_grad():
+        # init
+        # fusedconv = torch.nn.Conv2d(
+        conv_class = type(conv)
+        fusedconv = conv_class(
+            conv.in_channels,
+            conv.out_channels,
+            kernel_size=conv.kernel_size,
+            stride=conv.stride,
+            padding=conv.padding,
+            bias=True,
+            groups=conv.groups
+        )
+
+        # prepare filters
+        w_conv = conv.weight.clone().view(conv.out_channels, -1)
+        w_bn = torch.diag(bn.weight.div(torch.sqrt(bn.eps + bn.running_var)))
+        fusedconv.weight.copy_(torch.mm(w_bn, w_conv).view(fusedconv.weight.size()))
+
+        # prepare spatial bias
+        if conv.bias is not None:
+            b_conv = conv.bias
+        else:
+            b_conv = torch.zeros(conv.weight.size(0))
+        b_bn = bn.bias - bn.weight.mul(bn.running_mean).div(torch.sqrt(bn.running_var + bn.eps))
+        fusedconv.bias.copy_(b_conv + b_bn)
+
+        return fusedconv
+
+
+def replace_bn(model):
+    for k, v in model._modules.items():
+        if len(v._modules.items()) > 0:
+            replace_bn(v)
+        else:
+            if not isinstance(v, EmptyLayer):
+                if isinstance(v, nn.BatchNorm2d):
+                    if not hasattr(v, 'no_merging'):
+                        model._modules[k] = EmptyLayer()
+
+
+def remove_bn(net):
+    last_conv = None
+    l = []
+    for module in net.modules():
+        if isinstance(module, EigenBasisLayer):
+            main_module = module.sequential[1]
+            if isinstance(main_module, nn.Conv2d):
+                last_conv = module.sequential[2].conv
+        if isinstance(module, nn.BatchNorm2d):
+            if not hasattr(module, 'no_merging'):
+                l.append(fuse_conv_bnorm(last_conv, module))
+
+    ct = 0
+    for module in net.modules():
+        if isinstance(module, EigenBasisLayer):
+            main_module = module.sequential[1]
+            if isinstance(main_module, nn.Conv2d):
+                module.sequential[2] = l[ct]
+        if isinstance(module, nn.BatchNorm2d):
+            if not hasattr(module, 'no_merging'):
+                ct += 1
+
+    replace_bn(net)

@@ -1,7 +1,5 @@
 {
   "result_dir": "/app/results",
-  "checkpoint_file": "checkpoint_run_0_0.8130_0.9281.pth",
-  "batch_size": 100,
   "num_workers": 16,
   "momentum": 0.9,
   "weight_decay": 5e-4,
@@ -9,13 +7,18 @@
   "scheduler_params": {"0.5":  1},
   "lr": 0.00001,
   "log_interval": 100,
-  "network": "pyramidnet",
-  "depth": 272,
   "epochs_start": 10,
   "epochs_end": 10,
-  "max_iter": 100,
+  "max_iter": 5,
   "prune_ratio_limit": 0.5,
   "prune_ratio": 0.3,
   "alpha": 1e-4,
+
+  "comments_": "------ Do not touch parameters above! Explications about them can be found in the README file -------",
+
+  "network": "pyramidnet",
+  "batch_size": 100,
+  "checkpoint_file": "checkpoint_run_0_0.8130_0.9281.pth",
+  "use_rl": false,
   "exp_name": "pyramidnet_noskip_back"
 }

@@ -20,7 +20,7 @@ checkpoint file should only be put in the directory "MicroNet/Sparsity/sparse_we
 
 Still in the same docker than STEP 2-3 launch the command:
 
-CUDA_VISIBLE_DEVICES=0 python /usr/share/bind_mount/scripts/MicroNet/Quantization/main.py --config_path /usr/share/bind_mount/scripts/MicroNet/Quantization/config.json
+CUDA_VISIBLE_DEVICES=1 python /usr/share/bind_mount/scripts/MicroNet/Quantization/main.py --config_path /usr/share/bind_mount/scripts/MicroNet/Quantization/config.json
 
 - Be sure to complete the json file "config.json" appropriately before doing the quantization.
 
