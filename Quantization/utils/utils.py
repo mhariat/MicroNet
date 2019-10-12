@@ -391,3 +391,5 @@ def remove_bn(net):
                 ct += 1
 
     replace_bn(net)
+
+# TEST
