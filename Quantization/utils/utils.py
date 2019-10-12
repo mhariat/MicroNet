@@ -6,7 +6,10 @@ import numpy as np
 import scipy.misc
 import random
 from io import StringIO, BytesIO
-
+from utils.prune_utils import *
+from models.pyramid_net import *
+from nn import EmptyLayer
+import copy
 
 class TBLogger(object):
     r"""Logger to log data in tensorboard.
@@ -352,3 +355,39 @@ def fuse_conv_bnorm(conv, bn):
         fusedconv.bias.copy_(b_conv + b_bn)
 
         return fusedconv
+
+
+def replace_bn(model):
+    for k, v in model._modules.items():
+        if len(v._modules.items()) > 0:
+            replace_bn(v)
+        else:
+            if not isinstance(v, EmptyLayer):
+                if isinstance(v, nn.BatchNorm2d):
+                    if not hasattr(v, 'no_merging'):
+                        model._modules[k] = EmptyLayer()
+
+
+def remove_bn(net):
+    last_conv = None
+    l = []
+    for module in net.modules():
+        if isinstance(module, EigenBasisLayer):
+            main_module = module.sequential[1]
+            if isinstance(main_module, nn.Conv2d):
+                last_conv = module.sequential[2].conv
+        if isinstance(module, nn.BatchNorm2d):
+            if not hasattr(module, 'no_merging'):
+                l.append(fuse_conv_bnorm(last_conv, module))
+
+    ct = 0
+    for module in net.modules():
+        if isinstance(module, EigenBasisLayer):
+            main_module = module.sequential[1]
+            if isinstance(main_module, nn.Conv2d):
+                module.sequential[2] = l[ct]
+        if isinstance(module, nn.BatchNorm2d):
+            if not hasattr(module, 'no_merging'):
+                ct += 1
+
+    replace_bn(net)

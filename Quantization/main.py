@@ -19,19 +19,10 @@ def init_network(config):
                                                                                                 config.exp_name)
     checkpoint_file = config.checkpoint_file
     assert os.path.exists(path_to_add), 'No pruning for the corresponding network and/or experience'
-    if 'skip' in net.name.lower():
-        if config.alpha == 1e-4:
-            alpha = 4
-        elif config.alpha == 1e-5:
-            alpha = 5
-        else:
-            raise NotImplementedError
-        checkpoint_path = '{}/alpha_{}/{}'.format(path_to_add, alpha, checkpoint_file)
-        exp_name = config.exp_name
-    else:
-        checkpoint_path = '{}/{}'.format(path_to_add, checkpoint_file)
-        exp_name = config.exp_name
+    checkpoint_path = '{}/{}'.format(path_to_add, checkpoint_file)
+    exp_name = config.exp_name
     net = load_checkpoint_pruning(checkpoint_path, net, use_bias=True)
+    utils.remove_bn(net)
     if torch.cuda.is_available():
         net.cuda()
     compression = checkpoint_file.split('_')[-2]
@@ -60,7 +51,7 @@ def main(config):
     float_accuracy = utils.test(net, val_dataloader, loss_function, device)
 
     dataset = 'cifar_100'
-    path_to_add = '{}/{}/{}/{}'.format(dataset, config.network, config.depth, exp_name)
+    path_to_add = '{}/{}/{}/{}'.format(dataset, config.network, 272., exp_name)
     exp_name = config.exp_name
     checkpoint_dir = '{}/checkpoint/quantization/{}'.format(config.result_dir, path_to_add)
     create_dir(checkpoint_dir)
@@ -72,7 +63,7 @@ def main(config):
     message = 'Quantization part. Device used: {}. Dataset: {}. Number of classes: {}. Network to prune: {}_{}.' \
               ' Pruned Network accuracy: {:.2f}%.' \
               ' (Exp_name: {}. Network Compression: {:.2f}%. Network Sparsity: {:.2f}%)'.\
-        format(device_used, dataset, num_classes, config.network, config.depth, 100*float_accuracy, exp_name,
+        format(device_used, dataset, num_classes, config.network, 272, 100*float_accuracy, exp_name,
                100*compression, 100*sparsity)
     print(colored(message, 'magenta'))
 
@@ -92,7 +83,7 @@ def main(config):
     quant_net = quant.QuantizedNet(net, a_quant_module, w_quant_module)
 
     # Calibrate quantized network
-    calibrate(quant_net, train_dataloader, loss_function, device)
+    calibrate(quant_net, val_dataloader, loss_function, device)
 
     quant_accuracy = utils.test(quant_net, val_dataloader, loss_function, device)
     print('Quantized network accuracy %.3f ' % (quant_accuracy * 100))
