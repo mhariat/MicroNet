@@ -50,6 +50,13 @@ Search : **450 GPU Hours (33x faster than AutoAugment)**, ResNet-50 on Reduced I
 | ResNet-200 | 21.5 / 5.8 | 20.0 / 5.0  | **19.4 / 4.7**   |
 
 
+## Prerequisite:
+```
+test
+
+```
+
+
 ## Run
 
 Please follow these steps carefully to launch the training process:
