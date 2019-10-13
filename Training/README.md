@@ -1,4 +1,4 @@
-# Training of PyramidNet [STEP 1]
+# Step 1: Training of PyramidNet
 
 For the Micronet Challenge we chose to start from PyramidNet and then to compress it. Multiple reasons led to choose
 such a network. Amongst them:
