@@ -1,26 +1,22 @@
-# Training of PyramidNet + ShakeDrop (+ SkipNet) [STEP 1]
+# Training of PyramidNet [STEP 1]
 
 For the Micronet Challenge we chose to start from PyramidNet and then to compress it. Multiple reasons led to choose
 such a network. Amongst them:
 
 - High accuracy (see table below)
-- Reasonable number of parameters (26.2M) compared to Wide-Resnet-28-10 (36.5M)
+- Reasonable number of parameters (26.2M) compared to the benchmark Wide-Resnet-28-10 (36.5M)
 
-The code is mainly a git clone of the Official [Fast AutoAugment](https://arxiv.org/abs/1905.00397) implementation in
+The code is an adaptation of the Official [Fast AutoAugment](https://arxiv.org/abs/1905.00397) implementation in
 PyTorch.
 
-Fast Autoaugment is a simplified version of Autoaugment.
+Fast AutoAugment is a simplified version of the well known [AutoAugment](https://arxiv.org/abs/1805.09501) paper of
+Google Brain.
 
 - Fast AutoAugment learns augmentation policies using a more efficient search strategy based on density matching.
 - Fast AutoAugment speeds up the search time by orders of magnitude while maintaining the comparable performances.
 
-One of the author (Ildoo Kim) kindly gave us the policies obtained with Shake-Shake(26_2x96d) on CIFAR-100.
+One of the author, *Ildoo Kim*, kindly gave us the **policies obtained with Shake-Shake(26_2x96d) on CIFAR-100**.
 
-We then added to PyramidNet a dynamic routing in convolutional network named "SkipNet". For more details on this method
-please refer to the [paper](https://arxiv.org/pdf/1711.09485.pdf).
-SkipNet learns to route images through a subset of layers on a per-input basis. Challenging images are routed through
-more layers than easy images. We talk about two model designs with both feedforward gates and reccurent gates which
-enable different levels of parameter sharing in the paper.
 
 ## Table Results of Fast-Autoaugment
 
@@ -56,49 +52,30 @@ Search : **450 GPU Hours (33x faster than AutoAugment)**, ResNet-50 on Reduced I
 
 ## Run
 
-Please follow these steps to Launch the training process:
+Please follow these steps carefully to launch the training process:
 
-- First, build the Docker Image. To do so go to "~/MicroNet/Docker/myimages/fast_autoaugment" and run:
+- Build and Run the Docker Image *fast_autoaugment*. See Instructions in **MicroNet/Docker/myimages/fast_autoaugment**).
 
-docker build --no-cache --build-arg CUDA_VERSION=10.0 --build-arg CUDNN_VERSION=7 -t mhariat/fast_autoaugment .
+- Go to : */usr/share/bind_mount/scripts/MicroNet/Training* and install the requirements
 
-It may take some time...
+- Run the command: *export PYTHONPATH="$PYTHONPATH:/usr/share/bind_mount/scripts/MicroNet/Training"*
 
-- Then run the docker with the following command:
+- Go to */usr/share/bind_mount/scripts/MicroNet/Training/FastAutoAugment*
 
-docker run -v /local/ml/mhariat/cifar_100:/usr/share/bind_mount/data/cifar_100 \
-           -v /home/mhariat/MicroNet:/usr/share/bind_mount/scripts/MicroNet \
-           --runtime nvidia \
-           --name micronet \
-           --net host \
-           --ipc host \
-           --init \
-           --shm-size=2gb \
-           -it mhariat/fast_autoaugment
+- Run the command: *horovodrun -np 4
+                               --cache-capacity 2048 python train.py
+                               -c confs/pyramid272a200b.yaml
+                               --aug fa_shake26_2x96d_cifar100
+                               --dataset cifar100
+                               --batch 64
+                               --dataroot /usr/share/bind_mount/data/cifar_100
+                               --tag pyramidskipnet_bottleneck_fa_shake26_2x96d_cifar100
+                               --save /app/results/checkpoints
+                               --horovod*
 
-The cifar_100 images are assumed to be at "/local/ml/mhariat/cifar_100". In the directory "cifar_100", training images
-should be put in a sub-directory named "training_set" and the test images in a sub-directory named "test_set".
+The argument *np* allows you to choose the number of GPUs you want to use (here 4).
+The argument *aug* allows you to choose which data augmentation policy you want to use. As said earlier, the policies
+we are using were given by the authors and **obtained using only CIFAR-100**.
 
-The Micronet directory is assumed to be at "/home/mhariat/Micronet"
-
-You may have to change the command according to the location of your files/directories. However try to respect as much
-as possible the syntax to avoid errors.
-
-- Once in the docker, go to : "/usr/share/bind_mount/scripts/MicroNet/Training" and run the two following commands:
-
-1. pip install -r requirements.txt
-
-2. export PYTHONPATH="$PYTHONPATH:/usr/share/bind_mount/scripts/MicroNet/Training"
-
-- Finally go to "/usr/share/bind_mount/scripts/MicroNet/Training/FastAutoAugment" and launch the training with
-the command:
-
-horovodrun -np 4 --cache-capacity 2048 python train.py -c confs/pyramid272a200b.yaml --aug fa_shake26_2x96d_cifar100 --dataset cifar100 --batch 64 --dataroot /usr/share/bind_mount/data/cifar_100 --tag pyramidskipnet_bottleneck_fa_shake26_2x96d_cifar100 --save /app/results/checkpoints  --horovod
-
-You may have to change the number of GPU (here 4: "-np 4") and the batch size (here 64: "--batch 64") according to your
-computational ressources.
-
-To train PyramidNet + SkipNet go to confs/pyramid272a200b.yaml and change "pyramid" by "pyramid_skip" in model/type.
-
-The checkpoint weights are regularly (every 10 epochs) put in the directory "/app/results/checkpoints"
+The checkpoint weights are regularly saved (every 10 epochs) and put in the directory */app/results/checkpoints*.
 
