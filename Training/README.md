@@ -55,7 +55,7 @@ Search : **450 GPU Hours (33x faster than AutoAugment)**, ResNet-50 on Reduced I
 
 ### Prerequisite:
 1. Download CIFAR-100 dataset.
-1. Build and Run the Docker Image *fast_autoaugment*. See Instructions in **MicroNet/Docker/myimages**).
+1. Build and Run the Docker Image *fast_autoaugment*. See Instructions in **MicroNet/Docker/myimages**.
 
 
 ### How to run:
@@ -68,9 +68,12 @@ horovodrun -np 4 --cache-capacity 2048 python train.py -c confs/pyramid272a200b.
 ```
 
 The argument *np* allows you to choose the number of GPUs you want to use (here 4).
+
 Please see the *confs/pyramid272a200b.yaml* file to get more insights on the parameters used for the training process.
 You may notice an argument named *aug*. It allows you to choose which data augmentation policy you want to use.
+
 As said earlier, the policy use here was given by the authors and **obtained using only CIFAR-100**. You may want to
 change the batch size according to your computational ressources.
+
 The checkpoint weights are regularly saved (every 10 epochs) and put in the directory */app/results/checkpoints*.
 
