@@ -50,32 +50,27 @@ Search : **450 GPU Hours (33x faster than AutoAugment)**, ResNet-50 on Reduced I
 | ResNet-200 | 21.5 / 5.8 | 20.0 / 5.0  | **19.4 / 4.7**   |
 
 
-## Prerequisite:
-```
-test
-
-```
-
 
 ## Run
 
-Please follow these steps carefully to launch the training process:
+### Prerequisite:
+1. Download CIFAR-100 dataset.
+1. Build and Run the Docker Image *fast_autoaugment*. See Instructions in **MicroNet/Docker/myimages**).
 
-- Build and Run the Docker Image *fast_autoaugment*. See Instructions in **MicroNet/Docker/myimages**).
 
-- Go to : */usr/share/bind_mount/scripts/MicroNet/Training* and install the requirements
-
-- Run the command:
-$ export PYTHONPATH="$PYTHONPATH:/usr/share/bind_mount/scripts/MicroNet/Training"
-
-- Go to */usr/share/bind_mount/scripts/MicroNet/Training/FastAutoAugment*
-
-- Run the command:
-$ horovodrun -np 4 --cache-capacity 2048 python train.py -c confs/pyramid272a200b.yaml --tag pyramidnet --horovod
+### How to run:
+```
+cd /usr/share/bind_mount/scripts/MicroNet/Training
+pip install -r requirements.txt
+export PYTHONPATH="$PYTHONPATH:/usr/share/bind_mount/scripts/MicroNet/Training"
+cd FastAutoAugment
+horovodrun -np 4 --cache-capacity 2048 python train.py -c confs/pyramid272a200b.yaml --tag pyramidnet --horovod
+```
 
 The argument *np* allows you to choose the number of GPUs you want to use (here 4).
-The argument *aug* allows you to choose which data augmentation policy you want to use. As said earlier, the policies
-we are using were given by the authors and **obtained using only CIFAR-100**.
-
+Please see the *confs/pyramid272a200b.yaml* file to get more insights on the parameters used for the training process.
+You may notice an argument named *aug*. It allows you to choose which data augmentation policy you want to use.
+As said earlier, the policy use here was given by the authors and **obtained using only CIFAR-100**. You may want to
+change the batch size according to your computational ressources.
 The checkpoint weights are regularly saved (every 10 epochs) and put in the directory */app/results/checkpoints*.
 
