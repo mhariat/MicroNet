@@ -54,24 +54,17 @@ Search : **450 GPU Hours (33x faster than AutoAugment)**, ResNet-50 on Reduced I
 
 Please follow these steps carefully to launch the training process:
 
-- Build and Run the Docker Image *fast_autoaugment*. See Instructions in **MicroNet/Docker/myimages/fast_autoaugment**).
+- Build and Run the Docker Image *fast_autoaugment*. See Instructions in **MicroNet/Docker/myimages**).
 
 - Go to : */usr/share/bind_mount/scripts/MicroNet/Training* and install the requirements
 
-- Run the command: *export PYTHONPATH="$PYTHONPATH:/usr/share/bind_mount/scripts/MicroNet/Training"*
+- Run the command:
+$ export PYTHONPATH="$PYTHONPATH:/usr/share/bind_mount/scripts/MicroNet/Training"
 
 - Go to */usr/share/bind_mount/scripts/MicroNet/Training/FastAutoAugment*
 
-- Run the command: *horovodrun -np 4
-                               --cache-capacity 2048 python train.py
-                               -c confs/pyramid272a200b.yaml
-                               --aug fa_shake26_2x96d_cifar100
-                               --dataset cifar100
-                               --batch 64
-                               --dataroot /usr/share/bind_mount/data/cifar_100
-                               --tag pyramidskipnet_bottleneck_fa_shake26_2x96d_cifar100
-                               --save /app/results/checkpoints
-                               --horovod*
+- Run the command:
+$ horovodrun -np 4 --cache-capacity 2048 python train.py -c confs/pyramid272a200b.yaml --tag pyramidnet --horovod
 
 The argument *np* allows you to choose the number of GPUs you want to use (here 4).
 The argument *aug* allows you to choose which data augmentation policy you want to use. As said earlier, the policies
