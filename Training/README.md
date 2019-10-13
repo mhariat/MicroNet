@@ -54,7 +54,7 @@ Search : **450 GPU Hours (33x faster than AutoAugment)**, ResNet-50 on Reduced I
 ## Run
 
 ### Prerequisite:
-1. Download CIFAR-100 dataset (Pay attention to folder's names. See instructions in **Micronet/Docker**).
+1. Download CIFAR-100 dataset.
 1. Build and Run the Docker Image *fast_autoaugment*. See instructions in **MicroNet/Docker/myimages**.
 
 
