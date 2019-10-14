@@ -1,3 +1,3 @@
-<p align="center", font-size:4mm>
+<p align="center", font-size:10mm>
 # MicroNet Challenge
 </p>
