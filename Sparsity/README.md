@@ -26,8 +26,8 @@ Please note that the commands is meant to be use with only one GPU.
 *config.json* file.
 
 - The argument *checkpoint_file* allows you to choose the checkpoint of *step 2* you want to use. Please remember
-that the checkpoint file format is ***checkpoint_run_[nb]_[acc]_[compression].pth***. Try to choose a checkpoint being
-a good trade-off between compression and accuracy as you need a soft accuracy margin to need to go through
+that the checkpoint file format is ***checkpoint\_run\_[nb]\_[acc]\_[compression].pth***. Try to choose a checkpoint
+being a good trade-off between compression and accuracy as you need a soft accuracy margin to need to go through
 *step 3 (sparsity)* and *step 4 (quantization)* and still being above the challenge accuracy threshold (***80%***).
 
 
