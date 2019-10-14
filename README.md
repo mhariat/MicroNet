@@ -1,4 +1,4 @@
-<p style="text-align: center;">
+<p align="center">
 # MicroNet Challenge
 
 *Hosted at NeurIPS 2019*
