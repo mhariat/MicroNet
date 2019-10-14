@@ -7,7 +7,7 @@ This repository is our solution to the MicroNet challenge hosted at ***NeurIPS 2
 To obtain the final MicroNet score go to *MicroNet/Test* and execute *main.py*. Please **read carefully the
 corresponding** ***README*** **file before, to know exactly what to do**.
 
-You may also be interested in taking a look at the short report in *Micronet/Reports*.
+You may also be interested in taking a look at the short **report** in *Micronet/Reports*.
 
 ## Results
 
