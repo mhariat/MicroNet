@@ -1,2 +1,2 @@
 # <p align="center"> MicroNet Challenge </p>
-*hosted at NeurIPS 2019*
+## <p align="center"> *Hosted at NeurIPS 2019* </p>
