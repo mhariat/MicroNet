@@ -4,8 +4,8 @@ This repository is our solution to the MicroNet challenge hosted at ***NeurIPS 2
 
 ## Testing
 
-To obtain the final MicroNet score go to *MicroNet/Test* and execute *main.py*. Please **read carefully the** ***README***
-**file before to know exactly how to do so**.
+To obtain the final MicroNet score go to *MicroNet/Test* and execute *main.py*. Please **read carefully the
+corresponding** ***README*** **file before, to know exactly what to do**.
 
 You may also be interested in taking a look at the short report in *Micronet/Reports*.
 
@@ -42,12 +42,12 @@ Please see folder *Micronet/Training* and the corresponding *README* file for mo
 - **Step 2: Pruning**
 
 The pruning method used in this part is inspired of this [paper](https://arxiv.org/abs/1905.05934) and based on the
-computation of a **Hessian matrix** and the study of its eigenvalues in order to find the best way to prune.
+computation of a **hessian matrix** and the study of its **eigenvalues** in order to find the best way to prune.
 
 The pruning is done gradually with regular **fine-tuning** and **annealing** in between two pruning stages.
-During the annealing phase, the network is artificially increased.
+The annealing phase consists in slightly increasing the size of the network artificially.
 
-No sparsity is used during this part of the process. Parameters are **effectively removed** of the network.
+No sparsity is used during this step. Parameters are **effectively removed** of the network.
 
 At the end of this part we are able to get a network effectively **compressed at 92.81%** with **81.30% of accuracy**.
 
