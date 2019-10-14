@@ -19,8 +19,8 @@ cd /usr/share/bind_mount/scripts/MicroNet/Pruning/
 CUDA_VISIBLE_DEVICES=0,1 python main_prune.py --config_path config.json
 ```
 
-Please note that the commands is meant to use two GPUs. You can't use more with this implementation. To only use one
-GPU, open *config.json* and replace the argument *pruner_id: 1* by *pruner_id:0*
+Please note that the commands is meant to be use with two GPUs. You can't use more with this implementation.
+To only use one GPU, open *config.json* and replace the argument ***pruner_id: 1** by ***pruner_id:0***
 
 
 ### Important note:
