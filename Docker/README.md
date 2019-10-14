@@ -8,7 +8,7 @@ cd Micronet/Docker/myimages/fast_autoaugment
 docker build --no-cache --build-arg CUDA_VERSION=10.0 --build-arg CUDNN_VERSION=7 -t mhariat/fast_autoaugment .
 ```
 
-It may take some time...
+*It may take some time...*
 
 ### Pruning (used for *step 1, 2, 3, 4, 5*)
 ```
@@ -46,13 +46,13 @@ docker run -v /local/ml/mhariat/cifar_100:/usr/share/bind_mount/data/cifar_100 \
 
 ### Important notes:
 
-- The CIFAR-100 images are assumed to be at */local/ml/mhariat/cifar_100*. the MicroNet directory is assumed to be at
-*/home/mhariat/MicroNet* You may want to change the commands according to the location of your files/directories.
+- The CIFAR-100 images are assumed to be at ***/local/ml/mhariat/cifar_100***. The MicroNet directory is assumed to be at
+***/home/mhariat/MicroNet***. You may want to change the commands according to the location of your files/directories.
 
-- The CIFAR-100 images should be put in a directory named *cifar_100*.
+- The CIFAR-100 images should be put in a directory named ***cifar_100***.
 
-- In the directory *cifar_100*, training images should be put in a sub-directory named *training_set* and the test
-images in a sub-directory named *test_set*.
+- In the directory *cifar_100*, training images should be put in a sub-directory named ***training_set*** and the test
+images in a sub-directory named ***test_set***.
 
 
 Try to respect as much as possible the syntax to avoid errors.
