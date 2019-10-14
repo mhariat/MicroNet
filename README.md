@@ -2,10 +2,10 @@
 
 This repository is our solution to the MicroNet challenge hosted at ***NeurIPS 2019***.
 
-## How to Test
+## Testing
 
-To obtain the final MicroNet score go to *MicroNet/Test* and execute *main.py*. Please ***read carefully the README
-file before to know exactly how to do so***.
+To obtain the final MicroNet score go to *MicroNet/Test* and execute *main.py*. Please **read carefully the README
+file before to know exactly how to do so**.
 
 You may also be interested in taking a look at the short report in *Micronet/Reports*.
 
@@ -20,11 +20,11 @@ You may also be interested in taking a look at the short report in *Micronet/Rep
 
 ## Team
 
-- Marwane Hariat, marwane.hariat@gmail.com, Intern at Wave Computing, MS Student at ENS Paris-Saclay and École des Ponts ParisTech.
+- **Marwane Hariat**, marwane.hariat@gmail.com, Intern at *Wave Computing*, MS Student at *ENS Paris-Saclay* and *École des Ponts ParisTech*.
 
-- Sikandar Mashayak, symashayak@gmail.com, Wave Computing.
+- **Sikandar Mashayak**, symashayak@gmail.com, *Wave Computing*.
 
-- Sylvain Flamant, sflamant@gmail.com, Wave Computing.
+- **Sylvain Flamant**, sflamant@gmail.com, *Wave Computing*.
 
 
 
@@ -34,11 +34,8 @@ We addressed the challenge by splitting the work into 4 different steps.
 
 - **Step 1: Training**
 
-We decided to start from [PyramidNet](https://arxiv.org/pdf/1610.02915.pdf) (bottleneck, depth: 270, &alpha;=200)
-trained using [Fast-AutoAugment](https://arxiv.org/abs/1905.00397). We achieve **88.3% of accuracy**.
-
-The data augmentation policy is obtained with *Shake-Shake(26_2x96d)* and using **only CIFAR-100**. It was kindly given by the
-authors.
+We decided to start from [PyramidNet](https://arxiv.org/pdf/1610.02915.pdf).
+trained using [Fast-AutoAugment](https://arxiv.org/abs/1905.00397). We achieved **88.3% of accuracy**.
 
 Please see folder *Micronet/Training* and the corresponding README file for more details on this part of the process.
 
@@ -75,13 +72,13 @@ Please see folder *Micronet/Quantization* and the corresponding README file for 
 
 - **Step 5: Test**
 
-When all of the previous steps are done, we put the checkpoint weights in *Micronet/FinalWeights*.
+When all of the previous steps are done, checkpoint are put in *Micronet/FinalWeights*.
 
-One may notice a checkpoint named *checkpoint_sparsity.pth*. It's the checkpoint obtained at the end of *step 3*
-and common to all submissions.
+One may notice a checkpoint named *checkpoint_sparsity.pth* coming from *step 3* and common to all submissions.
 It's used to create the compressed network (much more different than the original PyramidNet as we truly remove
 parameters during *step 2*).
-Then, weights of *step 4*, stored in files named *checkpoint_quantization\_[n]\_submission.pth, are loaded.
+
+Then, checkpoints of *step 4*, stored in files named *checkpoint_quantization\_[n]\_submission.pth, are loaded.
 
 Please see folder *Micronet/Test* and the corresponding README file for more details on this part of the process.
 
