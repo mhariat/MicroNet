@@ -1,1 +1,1 @@
-<p style="text-align: center;">MicroNet Challenge</p>
+<p align="center"># MicroNet Challenge</p>
