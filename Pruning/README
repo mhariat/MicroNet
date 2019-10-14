@@ -1,66 +1,29 @@
-# Pruning of PyramidNet + ShakeDrop (+ SkipNet) [STEP 2]
+# STEP 2: Pruning of PyramidNet
 
-Our pruning method is inspired of this [paper](https://arxiv.org/abs/1905.05934). It's based on the computation of a
-Hessian matrix in order to find the best way to prune.
-
-Before beginning STEP 2, please be sure to have a directory named "trained_weights" in "MicroNet/Training" in which you
-would have put the checkpoint weights of the previous training (STEP 1).
-
-For PyramidNet only, please respect the following syntax:
-
-"MicroNet/Training/trained_weights/pyramidnet/pyramid_last_epoch.pth"
-
-For PyramidNet + SkipNet, please respect the following syntax:
-
-"MicroNet/Training/trained_weights/pyramidskipnet/alpha_4/pyramid_skip_last_epoch_alpha_4.pth"
+The pruning method used is inspired of this [paper](https://arxiv.org/abs/1905.05934). It's based on the computation
+of a Hessian matrix and the study of its eigenvalues in order to find the best way to prune. No sparsity is used during
+this part of the process. Parameters are effectivly removed of the network.
 
 
+## Run
 
-Please follow these steps to Launch the training process:
+### Prerequisite:
+1. Download CIFAR-100 dataset if not already done.
+2. Be sure to have the checkpoint of Step 1 put in *MicroNet/Training/trained_weights/pyramidnet*.
+3. Build and Run the Docker Image *pruning*. **See instructions** in *MicroNet/Docker/myimages*.
 
-- First, build the Docker Image. To do so go to "~/MicroNet/Docker/myimages/pruning" and run:
 
-docker build --no-cache --build-arg CUDA_VERSION=10.0 --build-arg CUDNN_VERSION=7 -t mhariat/pruning .
+### How to run:
+```
+cd /usr/share/bind_mount/scripts/MicroNet/Pruning/
+CUDA_VISIBLE_DEVICES=0,1 python main_prune.py --config_path config.json
+```
+
+Please note that the commands is meant to use two GPUs. You can't use more with this implementation. To only use one
+GPU, open *config.json* and replace the argument *pruner_id: 1* by *pruner_id:0*
 
 
-- Then run the docker with the following command:
-
-docker run -v /local/ml/mhariat/cifar_100:/usr/share/bind_mount/data/cifar_100 \
-           -v /home/mhariat/MicroNet:/usr/share/bind_mount/scripts/MicroNet \
-           --runtime nvidia \
-           --name micronet \
-           --net host \
-           --ipc host \
-           --init \
-           --shm-size=2gb \
-           -it mhariat/pruning
-
-This the docker that we are going to use until the end.
-
-The cifar_100 images are assumed to be at "/local/ml/mhariat/cifar_100". In the directory "cifar_100", training images
-should be put in a sub-directory named "training_set" and the test images in a sub-directory named "test_set".
-
-The Micronet directory is assumed to be at "/home/mhariat/Micronet"
-
-You may have to change the command according to the location of your files/directories. However try to respect as much
-as possible the syntax to avoid errors.
-
-- Once in the docker, just launch the command:
-CUDA_VISIBLE_DEVICES=0,1 python /usr/share/bind_mount/scripts/MicroNet/Pruning/main_prune.py --config_path /usr/share/bind_mount/scripts/MicroNet/Pruning/config.json
-
-Please note that I am using here two GPUS. You can't use more with this implementation.
-
-- Be sure to complete the json file "config.json" appropriately before pruning.
-
-Here are the arguments that must be respected:
-
-For PyramidNet only --> "exp_name": pyramidnet_noskip_back, "network": "pyramidnet"
-For PyramidNet only --> "exp_name": pyramidnet_skip_back, "network": "pyramidskipnet"
-
-If you wish to use only one GPU: "pruner_id": 0.
-
-- Please respect the way scripts and data are bind mounted to the docker.
-
-- The pruning is done with respect to specific batch sizes chosen to optimize the use of my GPU ressources.
-You may change them with respect to yours. To do so change line 120 or 121 of the file main_prune.py with the
-corresponding values.
+### Important note:
+The pruning is done with respect to **specific batch sizes** chosen to optimize the use of my GPU ressources.
+You may want to change them with respect to your limitations. To do so modify **line 80** of the file *main_prune.py*
+with your values.
