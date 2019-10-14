@@ -4,8 +4,8 @@ This repository is our solution to the MicroNet challenge hosted at ***NeurIPS 2
 
 ## Testing
 
-To obtain the final MicroNet score go to *MicroNet/Test* and execute *main.py*. Please **read carefully the README
-file before to know exactly how to do so**.
+To obtain the final MicroNet score go to *MicroNet/Test* and execute *main.py*. Please **read carefully the** ***README***
+**file before to know exactly how to do so**.
 
 You may also be interested in taking a look at the short report in *Micronet/Reports*.
 
@@ -37,12 +37,16 @@ We addressed the challenge by splitting the work into 4 different steps.
 We decided to start from [PyramidNet](https://arxiv.org/pdf/1610.02915.pdf) trained using
 [Fast-AutoAugment](https://arxiv.org/abs/1905.00397). We achieved **88.3% of accuracy**.
 
-Please see folder *Micronet/Training* and the corresponding README file for more details on this part of the process.
+Please see folder *Micronet/Training* and the corresponding *README* file for more details on this part of the process.
 
 - **Step 2: Pruning**
 
 The pruning method used in this part is inspired of this [paper](https://arxiv.org/abs/1905.05934) and based on the
 computation of a **Hessian matrix** and the study of its eigenvalues in order to find the best way to prune.
+
+The pruning is done gradually with regular **fine-tuning** and **annealing** in between two pruning stages.
+During the annealing phase, the network is artificially increased.
+
 No sparsity is used during this part of the process. Parameters are **effectively removed** of the network.
 
 At the end of this part we are able to get a network effectively **compressed at 92.81%** with **81.30% of accuracy**.
@@ -54,7 +58,7 @@ Please see folder *Micronet/Pruning* and the corresponding README file for more 
 This part of the process is a simple element-wise pruning method based on the **magnitude** of the parameters. We were
 able to add **45.31% of sparsity** to the already very compressed network.
 
-Please see folder *Micronet/Sparsity* and the corresponding README file for more details on this part of the process.
+Please see folder *Micronet/Sparsity* and the corresponding *README* file for more details on this part of the process.
 
 
 - **Step 4: Quantization**
@@ -63,10 +67,9 @@ The final part of the process consists in doing a uniform **fixed point** quanti
 common exponents for parameters of the same layer.
 
 All *weights* are quantized to ***9 bits*** (except for submission 2 in which case it's ***10 bits***).
-
 All *activations* are quantized to ***12 bits***.
 
-Please see folder *Micronet/Quantization* and the corresponding README file for more details on this part of the process.
+Please see folder *Micronet/Quantization* and the corresponding *README* file for more details on this part of the process.
 
 
 - **Step 5: Test**
@@ -77,8 +80,8 @@ One may notice a checkpoint named *checkpoint_sparsity.pth* coming from *step 3*
 It's used to create the compressed network (much more different than the original PyramidNet as we truly remove
 parameters during *step 2*).
 
-Then, checkpoints of *step 4*, stored in files named *checkpoint_quantization\_[n]\_submission.pth, are loaded.
+Then, checkpoints of *step 4*, stored in files named *checkpoint_quantization\_[n]\_submission.pth*, are loaded.
 
-Please see folder *Micronet/Test* and the corresponding README file for more details on this part of the process.
+Please see folder *Micronet/Test* and the corresponding *README* file for more details on this part of the process.
 
 
