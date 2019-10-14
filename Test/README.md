@@ -22,9 +22,9 @@ Please note that the commands is meant to be use with only one GPU.
 - You may want to change the batch size according to your ressources. To do so, change the *batch_size* argument in the
 *config.json* file.
 
-- The argument *submission* allows you to choose the submission you want to use. Please note that submission 2 is done
-with a weight quantization of *10 bits*. And require you to change the argument *param_bits* from *9* to *10* in the
-*config.json* file.
+- The argument *submission* allows you to choose the submission you want to use. Please note that **submission 2** is
+done with a weight quantization of *10 bits*. And require you to change the argument *param_bits* in the
+*config.json* file from ***param_bits: 9*** to ***param_bits: 10***
 
 
 ### Final Scores
