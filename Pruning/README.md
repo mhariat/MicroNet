@@ -25,5 +25,5 @@ To only use one GPU, open *config.json* and replace the argument ***pruner_id: 1
 
 ### Important note:
 The pruning is done with respect to **specific batch sizes** chosen to optimize the use of my GPU ressources.
-You may want to change them with respect to your limitations. To do so modify **line 80** of the file *main_prune.py*
+You may want to change them with respect to your limitations. To do so modify ***line 80*** of the file *main_prune.py*
 with your values.
