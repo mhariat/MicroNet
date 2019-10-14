@@ -20,15 +20,15 @@ CUDA_VISIBLE_DEVICES=0 python main.py --config_path config.json
 
 Please note that the commands is meant to be use with only one GPU.
 
-### Important note:
+### Important notes:
 
 - You may want to change the batch size according to your ressources. To do so, change the *batch_size* argument in the
-config.json file.
+*config.json* file.
 
 - The argument *checkpoint_file* allows you to choose the checkpoint of *step 2* you want to use. Please remember
 that the checkpoint file format is ***checkpoint_run_[nb]_[acc]_[compression].pth***. Try to choose a checkpoint being
-a good trade-off between compression and accuracy as you need a soft accuracy margin to survive both *step 3 (sparsity)*
- and *step 4 (quantization)*.
+a good trade-off between compression and accuracy as you need a soft accuracy margin to need to go through
+*step 3 (sparsity)* and *step 4 (quantization)* and still being above the challenge accuracy threshold (***80%***).
 
 
 
