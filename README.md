@@ -1,6 +1,3 @@
-<p align="center", font-size:2mm>
+<p align="center", font-size:4mm>
 # MicroNet Challenge
-
-*Hosted at NeurIPS 2019*
-
 </p>
