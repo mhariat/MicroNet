@@ -1,7 +1,9 @@
 # Step 4: Quantization
 
-The final part of the process consists in doing a uniform *fixed point* quantization of the network.
-All *weights* are quantized to ***9 bits***. All *activations* are quantized to ***12 bits***.
+The final part of the process consists in doing a uniform *fixed point* quantization of the network with a sharing
+common exponents for parameters of the same layer.
+All *weights* are quantized to ***9 bits*** (except for submission 2 in which case it's ***10 bits***).
+All *activations* are quantized to ***12 bits***.
 
 ## Run
 

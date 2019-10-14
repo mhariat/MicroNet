@@ -22,7 +22,7 @@ Please note that the commands is meant to be use with only one GPU.
 
 ### Important notes:
 
-- You may want to change the batch size according to your ressources. To do so, change the *batch_size* argument in the
+- You may want to change the batch size according to your resources. To do so, change the *batch_size* argument in the
 *config.json* file.
 
 - The argument *checkpoint_file* allows you to choose the checkpoint of *step 2* you want to use. Please remember

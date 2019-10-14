@@ -73,7 +73,7 @@ Please see the *confs/pyramid272a200b.yaml* file to get more insights on the par
 You may notice an argument named *aug*. It allows you to choose which data augmentation policy you want to use.
 
 As said earlier, the policy use here was given by the authors and **obtained using only CIFAR-100**. You may want to
-change the batch size according to your computational ressources.
+change the batch size according to your computational resources.
 
 The checkpoint weights are regularly saved (every 10 epochs) and put in the directory */app/results/checkpoints*.
 
