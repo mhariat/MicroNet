@@ -1,7 +1,7 @@
 # Step 4: Quantization
 
-The final part of the process consists in doing a quantization of the network. To do so, we are doing an uniform
-quantization. All *weights* are quantized to ***9 bits***. All *activations* are quantized to ***12 bits***
+The final part of the process consists in doing a uniform *fixed point* quantization of the network.
+All *weights* are quantized to ***9 bits***. All *activations* are quantized to ***12 bits***.
 
 ## Run
 
