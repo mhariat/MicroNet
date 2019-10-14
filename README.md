@@ -32,38 +32,38 @@ You may also be interested in taking a look at the short report in *Micronet/Rep
 
 We addressed the challenge by splitting the work into 4 different steps.
 
-- Step 1: Training
+- **Step 1: Training**
 
-We decided to start from **[PyramidNet]**(https://arxiv.org/pdf/1610.02915.pdf) (bottleneck, depth: 270, &alpha;=200)
-trained using **[Fast-AutoAugment]**(https://arxiv.org/abs/1905.00397). We achieve *88.3% of accuracy*.
+We decided to start from [PyramidNet](https://arxiv.org/pdf/1610.02915.pdf) (bottleneck, depth: 270, &alpha;=200)
+trained using [Fast-AutoAugment](https://arxiv.org/abs/1905.00397). We achieve **88.3% of accuracy**.
 
-The data augmentation **policy** obtained with **Shake-Shake(26_2x96d)** using **only CIFAR-100** was given by the
+The data augmentation policy is obtained with *Shake-Shake(26_2x96d)* and using **only CIFAR-100**. It was kindly given by the
 authors.
 
 Please see folder *Micronet/Training* and the corresponding README file for more details on this part of the process.
 
-- Step 2: Pruning
+- **Step 2: Pruning**
 
 The pruning method used in this part is inspired of this [paper](https://arxiv.org/abs/1905.05934).
-It's based on the computation of a Hessian matrix and the study of its eigenvalues in order to find the best way to
+It's based on the computation of a **Hessian matrix** and the study of its eigenvalues in order to find the best way to
 prune. No sparsity is used during this part of the process. Parameters are effectively removed of the network.
 
-At the end of this part we are able to get a network effectively *compressed at 92.81%* with *81.30% of accuracy*.
+At the end of this part we are able to get a network effectively **compressed at 92.81%** with **81.30% of accuracy**.
 
 Please see folder *Micronet/Pruning* and the corresponding README file for more details on this part of the process.
 
-- Step 3: Sparsity
+- **Step 3: Sparsity**
 
-This part of the process is a simple element-wise pruning method based on the magnitude of the parameters. It aims at
-adding sparsity to gain a little more compression. We were able to add *45.31% of sparsity* in the already compressed
+This part of the process is a simple element-wise pruning method based on the **magnitude** of the parameters. It aims at
+adding sparsity to gain a little more compression. We were able to add **45.31% of sparsity** in the already compressed
 network.
 
 Please see folder *Micronet/Sparsity* and the corresponding README file for more details on this part of the process.
 
 
-- Step 4: Quantization
+- **Step 4: Quantization**
 
-The final part of the process consists in doing a uniform *fixed point* quantization of the network with a sharing
+The final part of the process consists in doing a uniform **fixed point** quantization of the network with a sharing
 common exponents for parameters of the same layer.
 
 All *weights* are quantized to ***9 bits*** (except for submission 2 in which case it's ***10 bits***).
@@ -73,7 +73,7 @@ All *activations* are quantized to ***12 bits***.
 Please see folder *Micronet/Quantization* and the corresponding README file for more details on this part of the process.
 
 
-- Step 5: Test
+- **Step 5: Test**
 
 When all of the previous steps are done, we put the checkpoint weights in *Micronet/FinalWeights*.
 
