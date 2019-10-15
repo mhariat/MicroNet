@@ -32,8 +32,8 @@ done with a weight quantization of *10 bits*. And require you to change the argu
 | Submission        | Accuracy   | Score    |
 |-------------------------|------------|------------|
 | 1        | 80.11%        | 0.0467        |
-| 2       | 80.47%       | 0.0464        |
-| 3   | 80.003%        | 0.0456        |
+| 2       | 80.46%       | 0.0464        |
+| 3   | 80.01%        | 0.04558        |
 
 
 
