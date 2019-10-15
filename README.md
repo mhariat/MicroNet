@@ -35,7 +35,7 @@ We addressed the challenge by splitting the work into 4 different steps.
 - **Step 1: Training**
 
 We decided to start from [PyramidNet](https://arxiv.org/pdf/1610.02915.pdf) trained using
-[Fast-AutoAugment](https://arxiv.org/abs/1905.00397). We achieved **88.3% of accuracy**.
+[Fast-AutoAugment](https://arxiv.org/abs/1905.00397). We achieved **88% of accuracy**.
 
 Please see folder *Micronet/Training* and the corresponding *README* file for more details on this part of the process.
 
