@@ -12,6 +12,6 @@
   "network": "pyramidnet",
   "batch_size": 100,
   "freebie": false,
-  "submission": 2,
+  "submission": 3,
   "exp_name": "pyramidnet_noskip_back"
 }

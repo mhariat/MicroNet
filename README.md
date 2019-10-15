@@ -11,11 +11,11 @@ You may also be interested in taking a look at the short **report** in *Micronet
 
 ## Results
 
-| Submission        | Accuracy   | Score    |
-|-------------------------|------------|------------|
-| 1        | 80.11%        | 0.0467        |
-| 2       | 80.47%       | 0.0464        |
-| 3   | 80.003%        | 0.0456        |
+| Submission| Total Parameters (w/o Sparsity)| Total Parameters (w/ Sparsity)| Total Flops (w/ Sparsity)| Accuracy| Score|
+|-----------|------------|------------|------------|------------|------------|
+| 1         | 1.89 M    | 1.011M     | 580M       | 80.11%     | 0.0467     |
+| 2         | 1.826 M    | 0.951M     | 560M       | 80.46%     | 0.0464     |
+| 3         | 1.826 M    | 0.951M     | 560M       | 80.01%     | 0.04558    |
 
 
 ## Team

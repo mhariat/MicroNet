@@ -1,7 +1,11 @@
 # STEP 2: Pruning of PyramidNet
 
 The pruning method used is inspired of this [paper](https://arxiv.org/abs/1905.05934). It's based on the computation
-of a Hessian matrix and the study of its eigenvalues in order to find the best way to prune. No sparsity is used during
+of a hessian matrix and the study of its eigenvalues in order to find the best way to prune.
+
+The pruning is done gradually. After each compression stage, the network is fine-tuned. Then, the network is
+
+No sparsity is used during
 this part of the process. Parameters are effectively removed of the network.
 
 
