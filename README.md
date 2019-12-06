@@ -13,18 +13,18 @@ You may also be interested in taking a look at the short **report** in *Micronet
 
 | Submission| Total Parameters| Total Flops| Accuracy| Score|
 |-----------|------------|------------|------------|------------|
-| 1         | 0.3445 M     | 391.2 M     | 80.11%     | 0.0467     |
-| 2         | 0.3558 M    | 384.8 M     | 80.46%     | 0.0464     |
-| 3         | 0.32467 M    | 384.8 M | 80.01%     | 0.04558    |
+| 1         | 0.3445M     | 391.2M     | 80.11%     | 0.0467     |
+| 2         | 0.3558M    | 384.8M     | 80.46%     | 0.0464     |
+| 3         | 0.32467M    | 384.8M | 80.01%     | 0.04558    |
 
 
 ## Results without quantization
 
 | Submission| Total Parameters (w/o Sparsity)| Total Parameters (w/ Sparsity)| Total Flops (w/ Sparsity)| Accuracy| Score|
 |-----------|------------|------------|------------|------------|------------|
-| 1         | 1.89 M    | 1.011M     | 580M       | 80.11%     | 0.0467     |
-| 2         | 1.826 M    | 0.951M     | 560M       | 80.46%     | 0.0464     |
-| 3         | 1.826 M    | 0.951M     | 560M       | 80.01%     | 0.04558    |
+| 1         | 1.89M    | 1.011M     | 580M       | 80.11%     | 0.0467     |
+| 2         | 1.826M    | 0.951M     | 560M       | 80.46%     | 0.0464     |
+| 3         | 1.826M    | 0.951M     | 560M       | 80.01%     | 0.04558    |
 
 
 ## Team
