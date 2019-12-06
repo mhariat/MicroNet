@@ -9,7 +9,16 @@ corresponding** ***README*** **file before, to know exactly what to do**.
 
 You may also be interested in taking a look at the short **report** in *Micronet/Reports*.
 
-## Results
+## Results with quantization
+
+| Submission| Total Parameters| Total Flops| Accuracy| Score|
+|-----------|------------|------------|------------|------------|
+| 1         | 0.3445 M     | 391.2 M     | 80.11%     | 0.0467     |
+| 2         | 0.3558 M    | 384.8 M     | 80.46%     | 0.0464     |
+| 3         | 0.32467 M    | 384.8 M | 80.01%     | 0.04558    |
+
+
+## Results without quantization
 
 | Submission| Total Parameters (w/o Sparsity)| Total Parameters (w/ Sparsity)| Total Flops (w/ Sparsity)| Accuracy| Score|
 |-----------|------------|------------|------------|------------|------------|
